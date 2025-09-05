@@ -22,7 +22,8 @@
     "selectPrompt": "Select Prompt",
     "prompt": "Prompt",
     "success": "Success",
-    "error": "Failed"
+    "error": "Failed",
+    "defaultFileName": "Untitled"
   },
   "settings": {
     "general": {
@@ -42,6 +43,11 @@
         "language": {
           "title": "Language",
           "desc": "Choose the application's display language"
+        },
+        "scale": {
+          "title": "Interface Scale",
+          "desc": "Adjust the overall scale of the application interface",
+          "placeholder": "Select scale ratio"
         }
       }
     },
@@ -267,6 +273,43 @@
         "desc": "PicGo server URL",
         "ok": "Service is running, please ensure PicGo image hosting is configured.",
         "error": "Service is not running, please ensure PicGo (v2.2.0+) is running, otherwise image upload will fail."
+      },
+      "s3": {
+        "title": "S3 Object Storage",
+        "description": "Configure AWS S3 or S3-compatible object storage service as image hosting",
+        "status": "Connection Status",
+        "connected": "Connected",
+        "connecting": "Connecting",
+        "disconnected": "Disconnected",
+        "accessKeyId": "Access Key ID",
+        "accessKeyIdPlaceholder": "Enter Access Key ID",
+        "secretAccessKey": "Secret Access Key",
+        "secretAccessKeyPlaceholder": "Enter Secret Access Key",
+        "region": "Region",
+        "bucket": "Bucket",
+        "bucketPlaceholder": "Enter bucket name",
+        "advancedSettings": "Advanced Settings",
+        "endpoint": "Custom Endpoint",
+        "endpointDesc": "Leave empty for AWS S3, or enter S3-compatible service endpoint",
+        "customDomain": "Custom Domain",
+        "customDomainDesc": "Optional, custom domain for accessing images",
+        "pathPrefix": "Path Prefix",
+        "pathPrefixDesc": "Optional, path prefix for image storage",
+        "save": "Save Configuration",
+        "test": "Test Connection",
+        "setAsPrimary": "Set as Primary",
+        "error": "Configuration Error",
+        "requiredFields": "Please fill in required fields: Access Key ID, Secret Access Key, Region and Bucket",
+        "saveSuccess": "Configuration Saved",
+        "saveSuccessDesc": "S3 configuration has been saved",
+        "saveError": "Failed to Save Configuration",
+        "testSuccess": "Connection Test Successful",
+        "testSuccessDesc": "S3 connection is working, ready to upload images",
+        "testFailed": "Connection Test Failed",
+        "testFailedDesc": "Please check configuration and network connection",
+        "testFirstDesc": "Please test connection successfully before setting as primary",
+        "setPrimarySuccess": "Set Successfully",
+        "setPrimarySuccessDesc": "S3 has been set as primary image hosting"
       }
     },
     "imageMethod": {

@@ -1,12 +1,10 @@
 'use client'
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
-import { FormItem, SettingPanel, SettingRow } from "../components/setting-base";
+import { Eye, EyeOff, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslations } from 'next-intl';
 import useSettingStore from "@/stores/setting";
 import { Store } from "@tauri-apps/plugin-store";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { OpenBroswer } from "@/components/open-broswer";
 import dayjs from "dayjs";
@@ -14,7 +12,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Switch } from "@/components/ui/switch";
 import { getUserInfo } from "@/lib/github";
 import { RepoNames, SyncStateEnum } from "@/lib/github.types";
-import { FileImage } from "lucide-react";
 import useImageStore from "@/stores/imageHosting";
 import { createImageRepo, checkImageRepoState } from "@/lib/imageHosting/github";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -98,79 +95,127 @@ export function GithubImageHosting() {
     init()
   }, [])
 
+  const getStatusIcon = () => {
+    switch (imageRepoState) {
+      case SyncStateEnum.success:
+        return <CheckCircle className="size-4 text-green-500" />;
+      case SyncStateEnum.checking:
+        return <Loader2 className="size-4 animate-spin text-blue-500" />;
+      case SyncStateEnum.creating:
+        return <Loader2 className="size-4 animate-spin text-yellow-500" />;
+      case SyncStateEnum.fail:
+      default:
+        return <XCircle className="size-4 text-red-500" />;
+    }
+  };
+
+  const getStatusText = () => {
+    switch (imageRepoState) {
+      case SyncStateEnum.success:
+        return '已连接';
+      case SyncStateEnum.checking:
+        return '检测中';
+      case SyncStateEnum.creating:
+        return '创建中';
+      case SyncStateEnum.fail:
+      default:
+        return '未连接';
+    }
+  };
+
   return (
-    <div className="mt-4">
-      <SettingRow>
-        <FormItem title="Github Access Token" desc={t('settings.sync.newTokenDesc')}>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>GitHub 图床</CardTitle>
+            <CardDescription>
+              使用 GitHub 仓库作为图片存储服务
+            </CardDescription>
+          </div>
+          {imageRepoInfo && (
+            <Button 
+              onClick={() => setMainImageHosting('github')}
+              disabled={mainImageHosting === 'github' || !githubImageAccessToken || imageRepoState !== SyncStateEnum.success}
+              size="sm"
+            >
+              {mainImageHosting === 'github' ? 
+                '当前主要图床' : 
+                t('settings.imageHosting.setPrimaryBackup')
+              }
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* 状态显示 */}
+        <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+          <span className="text-sm font-medium">连接状态</span>
+          <div className="flex items-center gap-2">
+            {getStatusIcon()}
+            <span className="text-sm">{getStatusText()}</span>
+          </div>
+        </div>
+
+        {/* Access Token 配置 */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">GitHub Access Token</label>
+          <p className="text-xs text-muted-foreground">{t('settings.sync.newTokenDesc')}</p>
           <OpenBroswer url="https://github.com/settings/tokens/new" title={t('settings.sync.newToken')} className="mb-2" />
           <div className="flex gap-2">
-            <Input value={githubImageAccessToken} onChange={tokenChangeHandler} type={accessTokenVisible ? 'text' : 'password'} />
+            <Input 
+              value={githubImageAccessToken} 
+              onChange={tokenChangeHandler} 
+              type={accessTokenVisible ? 'text' : 'password'} 
+              placeholder="输入 GitHub Access Token"
+            />
             <Button variant="outline" size="icon" onClick={() => setAccessTokenVisible(!accessTokenVisible)}>
               {accessTokenVisible ? <Eye /> : <EyeOff />}
             </Button>
           </div>
-        </FormItem>
-      </SettingRow>
-      <SettingRow>
-        <FormItem title={t('settings.sync.repoStatus')}>
-          <Card>
-            <CardHeader className={`${imageRepoInfo ? 'border-b' : ''}`}>
-              <CardTitle className="flex justify-between items-center">
-                <div className="flex gap-2 items-center">
-                  <FileImage className="size-4" />
-                  {t('settings.sync.imageRepo')} （{ imageRepoInfo?.private ? t('settings.sync.private') : t('settings.sync.public') }）
-                </div>
-                <Badge className={`${imageRepoState === SyncStateEnum.success ? 'bg-green-800' : 'bg-red-800'}`}>{imageRepoState}</Badge>
-              </CardTitle>
-              <CardDescription>{t('settings.sync.imageRepoDesc')}</CardDescription>
-            </CardHeader>
-            {
-              imageRepoInfo &&
-              <CardContent className="flex items-center gap-4 mt-4">
-                <Avatar className="size-12"  >
+        </div>
+
+        {/* 仓库信息 */}
+        {imageRepoInfo && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">{t('settings.sync.repoStatus')}</label>
+            <div className="p-4 border rounded-lg">
+              <div className="flex items-center gap-4">
+                <Avatar className="size-12">
                   <AvatarImage src={imageRepoInfo?.owner.avatar_url || ''} />
                 </Avatar>
                 <div>
-                  <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
+                  <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
                     <OpenBroswer title={imageRepoInfo?.full_name || ''} url={imageRepoInfo?.html_url || ''} />
                   </h3>
-                  <CardDescription className="flex">
-                    <p className="text-zinc-500 leading-6">{t('settings.sync.createdAt', { time: dayjs(imageRepoInfo?.created_at).fromNow() })}，</p>
-                    <p className="text-zinc-500 leading-6">{t('settings.sync.updatedAt', { time: dayjs(imageRepoInfo?.updated_at).fromNow() })}。</p>
-                  </CardDescription>
+                  <p className="text-sm text-muted-foreground">
+                    {t('settings.sync.createdAt', { time: dayjs(imageRepoInfo?.created_at).fromNow() })}，
+                    {t('settings.sync.updatedAt', { time: dayjs(imageRepoInfo?.updated_at).fromNow() })}
+                  </p>
                 </div>
-              </CardContent>
-            }
-          </Card>
-        </FormItem>
-      </SettingRow>
-      {
-        imageRepoInfo &&
-        <>
-          <SettingPanel title={t('settings.sync.jsdelivrSetting')} desc={t('settings.sync.jsdelivrSettingDesc')}>
-            <Switch 
-              checked={jsdelivr} 
-              onCheckedChange={(checked) => setJsdelivr(checked)} 
-              disabled={!githubImageAccessToken || imageRepoState !== SyncStateEnum.success || !useImageRepo}
-            />
-          </SettingPanel>
-          <SettingRow className="mb-4">
-            {mainImageHosting === 'github' ? (
-              <Button disabled variant="outline">
-                {t('settings.imageHosting.isPrimaryBackup', { type: 'Github' })}
-              </Button>
-            ) : (
-              <Button 
-                variant="outline" 
-                onClick={() => setMainImageHosting('github')}
-                disabled={!githubImageAccessToken || imageRepoState !== SyncStateEnum.success}
-              >
-                {t('settings.imageHosting.setPrimaryBackup')}
-              </Button>
-            )}
-          </SettingRow>
-        </>
-      }
-    </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* JSDelivr 设置 */}
+        {imageRepoInfo && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="text-sm font-medium">{t('settings.sync.jsdelivrSetting')}</label>
+                <p className="text-xs text-muted-foreground">{t('settings.sync.jsdelivrSettingDesc')}</p>
+              </div>
+              <Switch 
+                checked={jsdelivr} 
+                onCheckedChange={(checked) => setJsdelivr(checked)} 
+                disabled={!githubImageAccessToken || imageRepoState !== SyncStateEnum.success || !useImageRepo}
+              />
+            </div>
+          </div>
+        )}
+
+      </CardContent>
+    </Card>
   )
 }

@@ -20,7 +20,8 @@
     "sync": "同期",
     "language": "言語",
     "success": "成功",
-    "error": "失敗"
+    "error": "失敗",
+    "defaultFileName": "無題のドキュメント"
   },
   "settings": {
     "general": {
@@ -40,6 +41,11 @@
         "language": {
           "title": "言語",
           "desc": "アプリケーションの表示言語を選択"
+        },
+        "scale": {
+          "title": "インターフェーススケール",
+          "desc": "アプリケーションインターフェースの全体的なスケールを調整",
+          "placeholder": "スケール比率を選択"
         }
       }
     },
@@ -265,6 +271,43 @@
         "desc": "PicGo サーバー URL",
         "ok": "サービスが起動しています。PicGo の設定を確認してください。",
         "error": "サービスが起動していません。PicGo（v2.2.0+）を起動してください。"
+      },
+      "s3": {
+        "title": "S3 オブジェクトストレージ",
+        "description": "AWS S3 または S3 互換のオブジェクトストレージサービスを画像ホスティングとして設定",
+        "status": "接続状態",
+        "connected": "接続済み",
+        "connecting": "接続中",
+        "disconnected": "未接続",
+        "accessKeyId": "Access Key ID",
+        "accessKeyIdPlaceholder": "Access Key ID を入力",
+        "secretAccessKey": "Secret Access Key",
+        "secretAccessKeyPlaceholder": "Secret Access Key を入力",
+        "region": "リージョン",
+        "bucket": "バケット",
+        "bucketPlaceholder": "バケット名を入力",
+        "advancedSettings": "詳細設定",
+        "endpoint": "カスタムエンドポイント",
+        "endpointDesc": "AWS S3 の場合は空白、S3 互換サービスのエンドポイントを入力",
+        "customDomain": "カスタムドメイン",
+        "customDomainDesc": "オプション、画像アクセス用のカスタムドメイン",
+        "pathPrefix": "パスプレフィックス",
+        "pathPrefixDesc": "オプション、画像保存のパスプレフィックス",
+        "save": "設定を保存",
+        "test": "接続テスト",
+        "setAsPrimary": "メインに設定",
+        "error": "設定エラー",
+        "requiredFields": "必須フィールドを入力してください：Access Key ID、Secret Access Key、リージョン、バケット",
+        "saveSuccess": "設定保存成功",
+        "saveSuccessDesc": "S3 設定が保存されました",
+        "saveError": "設定保存失敗",
+        "testSuccess": "接続テスト成功",
+        "testSuccessDesc": "S3 接続正常、画像アップロード可能",
+        "testFailed": "接続テスト失敗",
+        "testFailedDesc": "設定情報とネットワーク接続を確認してください",
+        "testFirstDesc": "メイン画像ホスティングに設定する前に接続テストを成功させてください",
+        "setPrimarySuccess": "設定成功",
+        "setPrimarySuccessDesc": "S3 がメイン画像ホスティングに設定されました"
       }
     },
     "imageMethod": {

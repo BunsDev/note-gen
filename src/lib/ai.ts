@@ -59,8 +59,12 @@ async function validateAIService(baseURL: string | undefined): Promise<string | 
  * 处理AI请求错误
  */
 export function handleAIError(error: any, showToast = true): string | null {
-  console.error(error)
   const errorMessage = error instanceof Error ? error.message : '未知错误'
+  // 检查是否是取消请求的错误，如果是则静默处理
+  if (error.message === 'Request was aborted.') {
+    // 静默处理取消请求，不显示任何消息
+    return null
+  }
   
   if (showToast) {
     toast({
@@ -460,8 +464,9 @@ export async function fetchAiStream(text: string, onUpdate: (content: string) =>
  * 流式方式获取AI结果，每次返回本次 token
  * @param text 请求文本
  * @param onUpdate 每次收到流式内容时的回调函数
+ * @param abortSignal 用于终止请求的信号
  */
-export async function fetchAiStreamToken(text: string, onUpdate: (content: string) => void): Promise<string> {
+export async function fetchAiStreamToken(text: string, onUpdate: (content: string) => void, abortSignal?: AbortSignal): Promise<string> {
   try {
     // 获取AI设置
     const aiConfig = await getAISettings()
@@ -473,15 +478,22 @@ export async function fetchAiStreamToken(text: string, onUpdate: (content: strin
     const { messages } = await prepareMessages(text, true)
   
     const openai = await createOpenAIClient(aiConfig)
+
     const stream = await openai.chat.completions.create({
       model: aiConfig?.model || '',
       messages: messages,
       temperature: aiConfig?.temperature,
       top_p: aiConfig?.topP,
       stream: true,
+    }, {
+      signal: abortSignal
     })
     
     for await (const chunk of stream) {
+      if (abortSignal?.aborted) {
+        break;
+      }
+      
       const content = chunk.choices[0]?.delta?.content || ''
       if (content) {
         onUpdate(content)

@@ -85,7 +85,7 @@
     "tesseract.js": "^5.1.1",
     "uuid": "^11.0.3",
     "vaul": "^1.1.1",
-    "vditor": "^3.10.9",
+    "vditor": "3.11.2",
     "words-count": "^2.0.2",
     "zod": "^3.23.8",
     "zustand": "^5.0.1"

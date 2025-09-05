@@ -20,7 +20,8 @@
     "sync": "同步",
     "language": "语言",
     "success": "成功",
-    "error": "失败"
+    "error": "失败",
+    "defaultFileName": "未命名文档"
   },
   "settings": {
     "general": {
@@ -40,6 +41,11 @@
         "language": {
           "title": "语言",
           "desc": "选择应用的显示语言"
+        },
+        "scale": {
+          "title": "界面缩放",
+          "desc": "调整应用界面的整体缩放比例",
+          "placeholder": "选择缩放比例"
         }
       }
     },
@@ -275,6 +281,43 @@
         "desc": "PicGo 服务器地址",
         "ok": "检测到服务正在运行，请确保 PicGo 图床已配置。",
         "error": "服务未运行，请确保 PicGo（需要 v2.2.0+） 应用正在运行，否则无法上传图片。"
+      },
+      "s3": {
+        "title": "S3 对象存储",
+        "description": "配置 AWS S3 或兼容 S3 协议的对象存储服务作为图床",
+        "status": "连接状态",
+        "connected": "已连接",
+        "connecting": "连接中",
+        "disconnected": "未连接",
+        "accessKeyId": "Access Key ID",
+        "accessKeyIdPlaceholder": "输入 Access Key ID",
+        "secretAccessKey": "Secret Access Key",
+        "secretAccessKeyPlaceholder": "输入 Secret Access Key",
+        "region": "区域",
+        "bucket": "存储桶",
+        "bucketPlaceholder": "输入存储桶名称",
+        "advancedSettings": "高级设置",
+        "endpoint": "自定义端点",
+        "endpointDesc": "留空使用 AWS S3，或输入兼容 S3 的服务端点",
+        "customDomain": "自定义域名",
+        "customDomainDesc": "可选，用于访问图片的自定义域名",
+        "pathPrefix": "路径前缀",
+        "pathPrefixDesc": "可选，图片存储的路径前缀",
+        "save": "保存配置",
+        "test": "测试连接",
+        "setAsPrimary": "设为主要图床",
+        "error": "配置错误",
+        "requiredFields": "请填写必填字段：Access Key ID、Secret Access Key、区域和存储桶",
+        "saveSuccess": "配置保存成功",
+        "saveSuccessDesc": "S3 配置已保存",
+        "saveError": "配置保存失败",
+        "testSuccess": "连接测试成功",
+        "testSuccessDesc": "S3 连接正常，可以上传图片",
+        "testFailed": "连接测试失败",
+        "testFailedDesc": "请检查配置信息和网络连接",
+        "testFirstDesc": "请先测试连接成功后再设为主要图床",
+        "setPrimarySuccess": "设置成功",
+        "setPrimarySuccessDesc": "S3 已设为主要图床"
       }
     },
     "backupSync": {

@@ -1,5 +1,3 @@
-import { SettingRow } from "../components/setting-base"
-import { FormItem } from "../components/setting-base"
 import { useTranslations } from 'next-intl';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,8 +5,8 @@ import { useState, useEffect } from "react";
 import { Store } from "@tauri-apps/plugin-store";
 import useImageStore from "@/stores/imageHosting";
 import { checkPicgoState, type PicgoImageHostingSetting } from "@/lib/imageHosting/picgo";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle, LoaderCircle, XCircle } from "lucide-react"
+import { CheckCircle, LoaderCircle, XCircle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const DEFAULT_URL = 'http://127.0.0.1:36677'
 
@@ -56,41 +54,72 @@ export default function PicgoImageHosting() {
     }
   }, [])
 
-  return <div>
-    <SettingRow className="mb-4"> 
-      <Alert variant={picgoState ? 'default' : 'destructive'}>
-        {
-          loading ? <LoaderCircle className="animate-spin size-4" /> :
-          picgoState ? <CheckCircle className="size-4 !text-green-500" /> : <XCircle className="size-4" />
-        }
-        <AlertTitle className="mb-1 text-base font-bold">PicGo</AlertTitle>
-        <AlertDescription>
-          {picgoState ? t('picgo.ok') : t('picgo.error')}
-        </AlertDescription>
-      </Alert>
-    </SettingRow>
-    <SettingRow>
-      <FormItem title="URL" desc={t('picgo.desc')}>
-        <Input
-          type="text"
-          value={url}
-          onChange={(e) => handleSaveUrl(e.target.value)}
-        />
-      </FormItem>
-    </SettingRow>
-    <SettingRow className="mb-4">
-      {mainImageHosting === 'picgo' ? (
-        <Button disabled variant="outline">
-          {t('isPrimaryBackup', { type: 'PicGo' })}
-        </Button>
-      ) : (
-        <Button 
-          variant="outline" 
-          onClick={() => setMainImageHosting('picgo')}
-        >
-          {t('setPrimaryBackup')}
-        </Button>
-      )}
-    </SettingRow>
-  </div>
+  const getStatusIcon = () => {
+    if (loading) {
+      return <LoaderCircle className="size-4 animate-spin text-blue-500" />;
+    }
+    if (picgoState) {
+      return <CheckCircle className="size-4 text-green-500" />;
+    }
+    return <XCircle className="size-4 text-red-500" />;
+  };
+
+  const getStatusText = () => {
+    if (loading) {
+      return '检测中';
+    }
+    if (picgoState) {
+      return '已连接';
+    }
+    return '未连接';
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>PicGo 图床</CardTitle>
+            <CardDescription>
+              使用 PicGo 客户端作为图片上传工具
+            </CardDescription>
+          </div>
+          <Button 
+            onClick={() => setMainImageHosting('picgo')}
+            disabled={mainImageHosting === 'picgo' || !picgoState}
+            size="sm"
+          >
+            {mainImageHosting === 'picgo' ? 
+              '当前主要图床' : 
+              t('setPrimaryBackup')
+            }
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* 状态显示 */}
+        <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+          <span className="text-sm font-medium">连接状态</span>
+          <div className="flex items-center gap-2">
+            {getStatusIcon()}
+            <span className="text-sm">{getStatusText()}</span>
+          </div>
+        </div>
+
+
+        {/* URL 配置 */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">PicGo 服务地址</label>
+          <p className="text-xs text-muted-foreground">{t('picgo.desc')}</p>
+          <Input
+            type="text"
+            value={url}
+            onChange={(e) => handleSaveUrl(e.target.value)}
+            placeholder="http://127.0.0.1:36677"
+          />
+        </div>
+
+      </CardContent>
+    </Card>
+  )
 }

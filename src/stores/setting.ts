@@ -144,6 +144,10 @@ interface SettingState {
   // 图片识别设置
   primaryImageMethod: 'ocr' | 'vlm'
   setPrimaryImageMethod: (method: 'ocr' | 'vlm') => Promise<void>
+
+  // 界面缩放设置
+  uiScale: number
+  setUiScale: (scale: number) => Promise<void>
 }
 
 
@@ -444,6 +448,18 @@ const useSettingStore = create<SettingState>((set, get) => ({
     const store = await Store.load('store.json');
     await store.set('primaryImageMethod', method)
     await store.save()
+  },
+
+  // 界面缩放设置 (75%, 100%, 125%, 150%)
+  uiScale: 100,
+  setUiScale: async (scale: number) => {
+    set({ uiScale: scale })
+    const store = await Store.load('store.json');
+    await store.set('uiScale', scale)
+    await store.save()
+    
+    // 使用fontSize实现基于rem的缩放
+    document.documentElement.style.fontSize = `${scale}%`
   },
 }))
 

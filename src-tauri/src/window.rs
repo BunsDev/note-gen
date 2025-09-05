@@ -16,6 +16,19 @@ fn handle_window_event(event: &WindowEvent, window: &tauri::WebviewWindow, app_h
         WindowEvent::CloseRequested { api, .. } => {
             // 阻止默认关闭行为
             api.prevent_close();
+            
+            #[cfg(target_os = "macos")]
+            {
+                // 检查是否处于全屏状态，如果是则先退出全屏
+                if let Ok(is_fullscreen) = window.is_fullscreen() {
+                    if is_fullscreen {
+                        let _ = window.set_fullscreen(false);
+                        // 等待退出全屏动画完成
+                        std::thread::sleep(std::time::Duration::from_millis(300));
+                    }
+                }
+            }
+            
             // 隐藏窗口到托盘
             let _ = window.hide();
             #[cfg(target_os = "macos")]

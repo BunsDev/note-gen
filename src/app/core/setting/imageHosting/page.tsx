@@ -9,6 +9,7 @@ import useImageStore from "@/stores/imageHosting";
 import { useEffect, useState } from "react";
 import { Store } from "@tauri-apps/plugin-store";
 import PicgoImageHosting from "./picgo";
+import { S3ImageHosting } from "./s3";
 import { SettingSwitch } from "./setting-switch";
 
 export default function ImageHostingPage() {
@@ -46,8 +47,9 @@ export default function ImageHostingPage() {
             PicGo
             {mainImageHosting === 'picgo' && <SquareCheckBig className="size-4" />}
           </TabsTrigger>
-          <TabsTrigger value="none" disabled>
-            Under development...
+          <TabsTrigger value="s3" className="flex items-center gap-2">
+            S3
+            {mainImageHosting === 's3' && <SquareCheckBig className="size-4" />}
           </TabsTrigger>
         </TabsList>
         <TabsContent value="github">
@@ -58,6 +60,9 @@ export default function ImageHostingPage() {
         </TabsContent>
         <TabsContent value="picgo">
           <PicgoImageHosting />
+        </TabsContent>
+        <TabsContent value="s3">
+          <S3ImageHosting />
         </TabsContent>
       </Tabs>
     </SettingType>

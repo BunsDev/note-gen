@@ -31,9 +31,15 @@ dayjs.extend(relativeTime)
 
 function DetailViewer({mark, content, path}: {mark: Mark, content: string, path?: string}) {
   const [value, setValue] = useState('')
+  const [descValue, setDescValue] = useState('')
   const { updateMark } = useMarkStore()
   const t = useTranslations('record.mark.type');
   const markT = useTranslations('record.mark');
+
+  async function textDescChangeHandler(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setDescValue(e.target.value)
+    await updateMark({ ...mark, desc: e.target.value })
+  }
 
   async function textMarkChangeHandler(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setValue(e.target.value)
@@ -42,6 +48,7 @@ function DetailViewer({mark, content, path}: {mark: Mark, content: string, path?
 
   useEffect(() => {
     setValue(mark.content || '')
+    setDescValue(mark.desc?.trim() || '')
   }, [mark])
   return (
     <Sheet>
@@ -67,7 +74,7 @@ function DetailViewer({mark, content, path}: {mark: Mark, content: string, path?
             mark.type === 'text' || mark.desc === mark.content ? null :
             <>
               <span className="block my-4 text-md text-zinc-900 font-bold">{markT('desc')}</span>
-              <ChatPreview text={mark.desc || ''} />
+              <Textarea placeholder="在此输入文本记录内容..." rows={3} value={descValue} onChange={textDescChangeHandler} />
             </>
           }
           <span className="block my-4 text-md text-zinc-900 font-bold">{markT('content')}</span>

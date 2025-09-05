@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { ThemeSettings } from './theme'
 import { LanguageSettings } from './language'
+import { ScaleSettings } from './scale'
 
 export function InterfaceSettings() {
   const t = useTranslations('settings.general.interface')
@@ -12,6 +13,7 @@ export function InterfaceSettings() {
       <h3 className="text-lg font-semibold mb-4">{t('title')}</h3>
       <ThemeSettings />
       <LanguageSettings />
+      <ScaleSettings />
     </div>
   )
 }

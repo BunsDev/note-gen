@@ -231,8 +231,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.2(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       vditor:
-        specifier: ^3.10.9
-        version: 3.11.1
+        specifier: 3.11.2
+        version: 3.11.2
       words-count:
         specifier: ^2.0.2
         version: 2.0.2
@@ -3640,8 +3640,8 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
 
-  vditor@3.11.1:
-    resolution: {integrity: sha512-7rjNSXYVyZG0mVZpUG2tfxwnoNtkcRCnwdSju+Zvpjf/r72iQa6kLpeThFMIKPuQ5CRnQQv6gnR3eNU6UGbC2Q==}
+  vditor@3.11.2:
+    resolution: {integrity: sha512-8QguQQUPWbBFocnfQmWjz4jiykQnvsmCuhOomGIVVK7vc+dQq2h8w9qQQuEjUTZpnZT5fEdYbj4aLr1NGdAZaA==}
 
   w3c-keyname@2.2.8:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
@@ -7331,7 +7331,7 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  vditor@3.11.1:
+  vditor@3.11.2:
     dependencies:
       diff-match-patch: 1.0.5
 

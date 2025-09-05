@@ -22,7 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { initSettingData } = useSettingStore()
+  const { initSettingData, uiScale } = useSettingStore()
   const { initMainHosting } = useImageStore()
   const { currentLocale } = useI18n()
   const { initShortcut } = useShortcutStore()
@@ -38,6 +38,13 @@ export default function RootLayout({
     initQuickRecordText(router)
     initShowWindow()
   }, [])
+
+  // 应用界面缩放
+  useEffect(() => {
+    if (uiScale && uiScale !== 100) {
+      document.documentElement.style.fontSize = `${uiScale}%`
+    }
+  }, [uiScale])
 
   useEffect(() => {
     switch (currentLocale) {

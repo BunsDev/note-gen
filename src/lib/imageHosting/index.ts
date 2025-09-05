@@ -1,6 +1,7 @@
 import { uploadImageByGithub } from "./github";
 import { uploadImageBySmms } from "./smms";
 import { uploadImageByPicgo } from "./picgo";
+import { uploadImageByS3 } from "./s3";
 import { Store } from "@tauri-apps/plugin-store";
 
 export async function uploadImage(file: File) {
@@ -13,6 +14,8 @@ export async function uploadImage(file: File) {
       return uploadImageBySmms(file)
     case 'picgo':
       return uploadImageByPicgo(file)
+    case 's3':
+      return uploadImageByS3(file)
     default:
       return undefined
   }
